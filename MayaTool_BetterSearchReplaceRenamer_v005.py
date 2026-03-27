@@ -606,7 +606,7 @@ class BetterRenamerUI(QtWidgets.QDialog):
         sel_inner.addLayout(sel_row)
 
         # ── RENAME ─────────────────────────────────────
-        ren_inner = make_section("Rename  —  Selection Only", "titleRename", main)
+        ren_inner = make_section("Rename  \u2014  Selection Only", "titleRename", main)
         ren_row = QtWidgets.QHBoxLayout()
         ren_row.setSpacing(6)
         self.rename_field = QtWidgets.QLineEdit(self.p_ren)
@@ -692,7 +692,7 @@ class BetterRenamerUI(QtWidgets.QDialog):
         rep_row.setSpacing(6)
         self.search_field = QtWidgets.QLineEdit(self.p_rs)
         self.search_field.setPlaceholderText("Search  (* = replace all,  $ = append)")
-        self.swap_btn = QtWidgets.QPushButton("⇄")
+        self.swap_btn = QtWidgets.QPushButton("\u21c4")
         self.swap_btn.setObjectName("swapButton")
         self.swap_btn.setFixedWidth(30)
         self.replace_field = QtWidgets.QLineEdit(self.p_rr)
