@@ -1,15 +1,17 @@
 # ------------------------------------------------------
 # Better Search & Rename Tool for Maya
-# Inspired by mRebaseRenamer by mRebase on Gumroad. Recreated the same ideas with a few tweaks in Python so that I can use it. Cuz it's originally in PyMel, and my schooi can't install PyMel in their computers.
-# Version: 4.0.0 (Soft Neon Theme)
+# Inspired by mRebaseRenamer by mRebase on Gumroad. 
+# Recreated the same ideas with a few tweaks in Python so that I can use it. 
+# Cuz it's originally in PyMel, and my school can't install PyMel on their computers.
+# Version: 5.0.0 (Soft Neon Theme)
 # ------------------------------------------------------
 # Purple Rename Button Colour could be better. It's a bit brighter than the rest at the moment. At least it looks like it.
 # The border colours could also be made a bit brighter. Who knows.
 # ------------------------------------------------------
 
-
 import maya.cmds as cmds
 import maya.OpenMayaUI as omui
+import functools
 import fnmatch
 import re
 
@@ -339,6 +341,17 @@ def get_maya_main_window():
     main_window_ptr = omui.MQtUtil.mainWindow()
     return wrapInstance(int(main_window_ptr), QtWidgets.QWidget)
 
+def undoable(func): # takes function in
+    @functools.wraps(func)
+    # copies the original function's name and docstring onto the wrapper.
+    # Without it, the function would show up as wrapper in error messages.
+    def wrapper(*args, **kwargs):
+        cmds.undoInfo(openChunk=True) # runs BEFORE function
+        try:
+            return func(*args, **kwargs) # runs actual function
+        finally:
+            cmds.undoInfo(closeChunk=True)  # runs AFTER, even on error
+    return wrapper # hands back the wrapped version
 
 # ------------------------------------------------------
 # SECTION FRAME HELPER
@@ -369,6 +382,7 @@ def make_section(title, title_object_name, parent_layout):
 # ------------------------------------------------------
 # MAIN TOOL LOGIC
 # ------------------------------------------------------
+@undoable
 def run_tool(action, ui):
     sel_txt    = ui.select_field.text()
     ren_txt    = ui.rename_field.text()
@@ -606,7 +620,7 @@ class BetterRenamerUI(QtWidgets.QDialog):
         sel_inner.addLayout(sel_row)
 
         # ── RENAME ─────────────────────────────────────
-        ren_inner = make_section("Rename  \u2014  Selection Only", "titleRename", main)
+        ren_inner = make_section("Rename  —  Selection Only", "titleRename", main)
         ren_row = QtWidgets.QHBoxLayout()
         ren_row.setSpacing(6)
         self.rename_field = QtWidgets.QLineEdit(self.p_ren)
@@ -692,7 +706,7 @@ class BetterRenamerUI(QtWidgets.QDialog):
         rep_row.setSpacing(6)
         self.search_field = QtWidgets.QLineEdit(self.p_rs)
         self.search_field.setPlaceholderText("Search  (* = replace all,  $ = append)")
-        self.swap_btn = QtWidgets.QPushButton("\u21c4")
+        self.swap_btn = QtWidgets.QPushButton("⇄")
         self.swap_btn.setObjectName("swapButton")
         self.swap_btn.setFixedWidth(30)
         self.replace_field = QtWidgets.QLineEdit(self.p_rr)
