@@ -1,12 +1,6 @@
 # ------------------------------------------------------
 # Better Search & Rename Tool for Maya
-# Inspired by mRebaseRenamer by mRebase on Gumroad. 
-# Recreated the same ideas with a few tweaks in Python so that I can use it. 
-# Cuz it's originally in PyMel, and my school can't install PyMel on their computers.
-# Version: 5.0.0 (Soft Neon Theme)
-# ------------------------------------------------------
-# Purple Rename Button Colour could be better. It's a bit brighter than the rest at the moment. At least it looks like it.
-# The border colours could also be made a bit brighter. Who knows.
+# Version: 4.0.0 (Soft Neon Theme)
 # ------------------------------------------------------
 
 import maya.cmds as cmds
@@ -548,7 +542,8 @@ class BetterRenamerUI(QtWidgets.QDialog):
         super(BetterRenamerUI, self).__init__(parent)
         self.setWindowTitle(self.WINDOW_TITLE)
         self.setMinimumWidth(460)
-        self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowContextHelpButtonHint)
+        self.setMinimumHeight(476)
+        self.setWindowFlags(self.windowFlags() | QtCore.Qt.WindowMinMaxButtonsHint)
         self.setStyleSheet(STYLESHEET)
         self._load_prefs()
         self._build_ui()
